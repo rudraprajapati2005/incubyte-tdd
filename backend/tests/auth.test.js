@@ -38,4 +38,13 @@ describe("POST /api/auth/register", () => {
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error");
   });
+
+  it("should fail if password is missing", async () => {
+    const res = await request(app)
+      .post("/api/auth/register")
+      .send({ email: "test@example.com" });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error");
+  });
 });
