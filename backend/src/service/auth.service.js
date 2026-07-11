@@ -28,13 +28,17 @@ class AuthService {
 
 
   async loginUser({ email, password }) {
+    
     const user = await userRepository.findByEmail(email);
     if (!user) {
       const err = new Error("Invalid credentials");
       err.statusCode = 401;
       throw err;
     }
-
+    if(!password)
+    {
+      throw new ErrorResponse("INVALID PASSWORD" , "Password Field is empty" , 400);
+    }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       const err = new Error("Invalid credentials");
