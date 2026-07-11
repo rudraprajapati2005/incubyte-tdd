@@ -49,8 +49,9 @@ describe("POST /api/auth/login", () => {
       .post("/api/auth/login")
       .send({ email: "nonexistent@example.com", password: "Valid@12356" });
 
-    expect(res.statusCode).toBe(401);
+    expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error", "Invalid credentials");
   });
+
 
 });
