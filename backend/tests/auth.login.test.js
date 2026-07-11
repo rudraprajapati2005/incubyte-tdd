@@ -36,5 +36,21 @@ describe("POST /api/auth/login", () => {
     expect(res.body).toHaveProperty("token");
   });
 
- 
+   it("should fail if email or password fields are missing", async () => {
+    const res = await request(app)
+      .post("/api/auth/login")
+      .send({ email: "existinguser@example.com" }); // Missing password
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error");
+  });
+  it("should fail if the email does not exist", async () => {
+    const res = await request(app)
+      .post("/api/auth/login")
+      .send({ email: "nonexistent@example.com", password: "Valid@12356" });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body).toHaveProperty("error", "Invalid credentials");
+  });
+
 });
