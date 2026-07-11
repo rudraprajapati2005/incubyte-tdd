@@ -3,7 +3,12 @@ import AuthService from "../service/auth.service.js";
 export const registerUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    console.log(email + " " + password);
+     if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+    if (!password) {
+      return res.status(400).json({ error: "Password is required" });
+    }
     const result = await AuthService.registerUser({ email, password });
     console.log(result);
     res.status(200).json(
