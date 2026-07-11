@@ -26,37 +26,46 @@ class AuthService {
     return { token };
   }
 
-
   async loginUser({ email, password }) {
-    
+
+    if (!password) {
+        throw new ErrorResponse(
+            "INVALID_PASSWORD",
+            "Password field is empty",
+            400
+        );
+    }
     const user = await userRepository.findByEmail(email);
     if (!user) {
-      const err = new Error("Invalid credentials");
-      err.statusCode = 401;
-      throw err;
+        throw new ErrorResponse(
+            "INVALID_CREDENTIALS",
+            "Invalid credentials",
+            400
+        );
     }
-    if(!password)
-    {
-      throw new ErrorResponse("INVALID PASSWORD" , "Password Field is empty" , 400);
-    }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      const err = new Error("Invalid credentials");
-      err.statusCode = 401;
-      throw err;
-    }
-
-    const token = jwt.sign(
-      { userId: user._id, role: user.role },
-      process.env.JWT_SECRET || "fallback_secret_key",
-      { expiresIn: "1d" }
+    const isPasswordValid = await bcrypt.compare(
+        password,
+        user.password
     );
-
+    if (!isPasswordValid) {
+        throw new ErrorResponse(
+            "INVALID_CREDENTIALS",
+            "Invalid credentials",
+            400
+        );
+    }
+    const token = jwt.sign(
+        {
+            id: user._id,
+            email: user.email,
+            role: user.role
+        },
+        process.env.JWT_SECRET || "secret",
+        {
+            expiresIn: "1d"
+        }
+    );
     return { token };
-  }
-
-
 }
-
-
+}
 export  default new AuthService();
