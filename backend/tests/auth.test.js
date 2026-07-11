@@ -24,7 +24,7 @@ describe("POST /api/auth/register", () => {
   it("should register a new user and return JWT", async () => {
     const res = await request(app)
       .post("/api/auth/register")
-      .send({ email: "test@example.com", password: "123456" });
+      .send({ email: "test@example.com", password: "Valid@12356" });
 
     // Your controller uses 200, not 201
     expect(res.statusCode).toBe(200);
@@ -51,11 +51,11 @@ describe("POST /api/auth/register", () => {
     it("should fail if user already exists", async () => {
     await request(app)
       .post("/api/auth/register")
-      .send({ email: "test@example.com", password: "123456" });
+      .send({ email: "test@example.com", password: "Valid@12356" });
 
     const res = await request(app)
       .post("/api/auth/register")
-      .send({ email: "test@example.com", password: "123456" });
+      .send({ email: "test@example.com", password: "Valid@12356" });
 
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error", "User already exists");
@@ -64,7 +64,7 @@ describe("POST /api/auth/register", () => {
   it("should fail if email format is invalid", async () => {
   const res = await request(app)
     .post("/api/auth/register")
-    .send({ email: "invalidEmail", password: "Valid@123" });
+    .send({ email: "invalidEmail", password: "Valid@12356" });
 
   expect(res.statusCode).toBe(400);
   expect(res.body).toHaveProperty("error", "Invalid email format");
