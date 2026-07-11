@@ -1,0 +1,47 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Build output
+dist/
+build/
+target/
+
+# Database files (if any local SQLite or temp DB)
+*.sqlite
+*.db
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.swp
+
+# Test snapshots (optional, if you don’t want them)
+__snapshots__/
+
+# Optional: lock files (if you don’t want to commit them)
+# package-lock.json
+# yarn.lock
