@@ -25,6 +25,34 @@ class AuthService {
 
     return { token };
   }
+
+
+  async loginUser({ email, password }) {
+    const user = await userRepository.findByEmail(email);
+    if (!user) {
+      const err = new Error("Invalid credentials");
+      err.statusCode = 401;
+      throw err;
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      const err = new Error("Invalid credentials");
+      err.statusCode = 401;
+      throw err;
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET || "fallback_secret_key",
+      { expiresIn: "1d" }
+    );
+
+    return { token };
+  }
+
+
 }
+
 
 export  default new AuthService();
