@@ -43,12 +43,22 @@ class VehicleService {
   }
 
   async purchaseVehicle(id, qty) {
-    return await vehicleRepository.purchase(id, qty);
+    //checking the Quantity before purchasing
+  if (qty <= 0) {
+    throw new ErrorResponse("INVALID_QUANTITY", "Purchase quantity must be positive", 400);
   }
+  return await vehicleRepository.purchase(id, qty);
+}
 
-  async restockVehicle(id, qty) {
-    return await vehicleRepository.restock(id, qty);
-  } 
+async restockVehicle(id, qty) {
+
+  //Admin cannot enter a negative value for the quatity while reStocking
+  if (qty <= 0) {
+    throw new ErrorResponse("INVALID_QUANTITY", "Restock quantity must be positive", 400);
+  }
+  return await vehicleRepository.restock(id, qty);
+}
+
   
 }
 

@@ -17,6 +17,13 @@ const UserSchema = new Schema(
         message:
           "Password must be at least 8 characters, contain one uppercase letter, and one special character",
       },
+      
+    },
+
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
     },
   },
   { timestamps: true }

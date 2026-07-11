@@ -9,14 +9,15 @@ import {
   purchaseVehicle,
   restockVehicle
 } from "../controller/vehicle.controller.js";
+import {authMiddleware , adminOnly } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
-router.post("/", addVehicle);
-router.get("/", getVehicles);
-router.put("/:id", putVehicle);
-router.get("/search", searchVehicles);
-router.delete("/:id", deleteVehicle);
-router.post("/:id/purchase", purchaseVehicle);
-router.post("/:id/restock", restockVehicle);
+router.post("/", authMiddleware, addVehicle);
+router.get("/", authMiddleware,getVehicles);
+router.put("/:id",authMiddleware , adminOnly,putVehicle);
+router.get("/search",authMiddleware ,searchVehicles);
+router.delete("/:id",authMiddleware ,adminOnly,deleteVehicle);
+router.post("/:id/purchase",authMiddleware ,purchaseVehicle);
+router.post("/:id/restock", authMiddleware , adminOnly ,restockVehicle);
 
 export default router;
