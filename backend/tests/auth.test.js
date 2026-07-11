@@ -69,7 +69,17 @@ describe("POST /api/auth/register", () => {
   expect(res.statusCode).toBe(400);
   expect(res.body).toHaveProperty("error", "Invalid email format");
 });
+  it("should fail if password does not meet complexity rules", async () => {
+  const res = await request(app)
+    .post("/api/auth/register")
+    .send({ email: "test@example.com", password: "weakpass" });
 
+  expect(res.statusCode).toBe(400);
+  expect(res.body).toHaveProperty(
+    "error",
+    "Password must be at least 8 characters, contain one uppercase letter, and one special character"
+  );
+});
 
 
 });
