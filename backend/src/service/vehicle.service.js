@@ -8,6 +8,11 @@ class VehicleService {
     return { id: vehicle._id };
   }
 
+  async getVehicles(){
+    const vehicles = await vehicleRepository.findAll();
+    return vehicles;
+  }
+
 }
 
 export default new VehicleService();
