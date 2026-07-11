@@ -29,6 +29,26 @@ class VehicleService {
 
     return updatedVehicle;
   }
+
+   async searchVehicles(query) {
+    return await vehicleRepository.search(query);
+  }
+
+  async deleteVehicleById(id) {
+    const deleted = await vehicleRepository.deleteById(id);
+    if (!deleted) {
+      throw new ErrorResponse("NOT_FOUND", "Vehicle not found", 404);
+    }
+    return deleted;
+  }
+
+  async purchaseVehicle(id, qty) {
+    return await vehicleRepository.purchase(id, qty);
+  }
+
+  async restockVehicle(id, qty) {
+    return await vehicleRepository.restock(id, qty);
+  } 
   
 }
 
