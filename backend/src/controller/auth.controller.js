@@ -6,6 +6,7 @@ export const registerUser = async (req, res, next) => {
      if (!email) {
       return res.status(400).json({ error: "Email is required" });
     }
+    //already added the password validity
     if (!password) {
       return res.status(400).json({ error: "Password is required" });
     }
