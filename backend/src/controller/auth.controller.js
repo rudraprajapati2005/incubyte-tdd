@@ -10,6 +10,13 @@ export const registerUser = async (req, res, next) => {
     if (!password) {
       return res.status(400).json({ error: "Password is required" });
     }
+    //Email Format Validation 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
+
+    //Registering User
     const result = await AuthService.registerUser({ email, password });
     console.log(result);
     res.status(200).json(
