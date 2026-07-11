@@ -1,12 +1,13 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import * as userRepository from "../repository/user.repository.js";
-
+import ErrorResponse from "../errorHandler/errorResponse.js";
 class AuthService {
   async registerUser({ email, password }) {
     const existing = await userRepository.findByEmail( email );
     if (existing) {
-      throw new Error("User already exists");
+      //added the custom error Response
+      throw new ErrorResponse("User already exists" ,"User already exists" , 400);
     }
 
     // Hash password
