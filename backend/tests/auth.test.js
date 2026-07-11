@@ -59,5 +59,17 @@ describe("POST /api/auth/register", () => {
 
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error", "User already exists");
-  })
+  });
+
+  it("should fail if email format is invalid", async () => {
+  const res = await request(app)
+    .post("/api/auth/register")
+    .send({ email: "invalidEmail", password: "Valid@123" });
+
+  expect(res.statusCode).toBe(400);
+  expect(res.body).toHaveProperty("error", "Invalid email format");
+});
+
+
+
 });
