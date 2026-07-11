@@ -17,3 +17,15 @@ export const getVehicles = async (req, res, next) => {
     next(err);
   }
 };
+
+export const putVehicle = async(req ,res, next) => {
+    try{
+
+        const updatedVehicle = await VehicleService.updateVehicleById(req.params.id , req.body);
+        res.status(200).json(updatedVehicle);
+    }
+    catch(err)
+    {
+        next(err);
+    }
+}
