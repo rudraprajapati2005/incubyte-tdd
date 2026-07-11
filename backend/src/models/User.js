@@ -1,20 +1,25 @@
 import {Schema , model} from "mongoose";
 
 const UserSchema = new Schema(
-    {
-        email : {
-            type : String ,
-            required : true,
-            unique : true,
-        },
-
-        password : {
-            type : String,
-            required : true,
-        }
-    },{
-        timestamps : true
-    }
+  {
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format"],
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+      validate: {
+        validator: (value) =>
+          /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/.test(value),
+        message:
+          "Password must be at least 8 characters, contain one uppercase letter, and one special character",
+      },
+    },
+  },
+  { timestamps: true }
 );
 
 export default model("User" , UserSchema);
