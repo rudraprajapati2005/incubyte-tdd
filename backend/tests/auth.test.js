@@ -47,4 +47,17 @@ describe("POST /api/auth/register", () => {
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error");
   });
+
+    it("should fail if user already exists", async () => {
+    await request(app)
+      .post("/api/auth/register")
+      .send({ email: "test@example.com", password: "123456" });
+
+    const res = await request(app)
+      .post("/api/auth/register")
+      .send({ email: "test@example.com", password: "123456" });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error", "User already exists");
+  })
 });
