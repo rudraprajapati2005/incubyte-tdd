@@ -34,5 +34,19 @@ describe("Vehicle API", () => {
   expect(Array.isArray(res.body)).toBe(true);
 });
 
+    it("should update a vehicle", async () => {
+  const createRes = await request(app)
+    .post("/api/vehicles")
+    .send({ make: "Honda", model: "Civic", category: "SEDAN", price: 18000, quantity: 3 });
+
+  const vehicleId = createRes.body.id;
+
+  const updateRes = await request(app)
+    .put(`/api/vehicles/${vehicleId}`)
+    .send({ price: 19000 });
+
+  expect(updateRes.statusCode).toBe(200);
+  expect(updateRes.body.price).toBe(19000);
+});
 
 });
