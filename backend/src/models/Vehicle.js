@@ -42,7 +42,7 @@ const VehicleSchema = new Schema(
             min : 0,
         },
 
-        quatityInStock : {
+        quantity : {
 
             type : Number ,
             required : true,

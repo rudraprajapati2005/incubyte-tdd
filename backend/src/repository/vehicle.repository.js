@@ -15,3 +15,21 @@ export const updateById = async (id, data) => {
     runValidators: true // enforce schema validation
   });
 };
+
+export const search = async (query) => Vehicle.find(query);
+
+export const deleteById = async (id) => Vehicle.findByIdAndDelete(id);
+
+export const purchase = async (id, qty) => {
+  const vehicle = await Vehicle.findById(id);
+  if (!vehicle || vehicle.quantity < qty) throw new Error("Not enough stock");
+  vehicle.quantity -= qty;
+  return vehicle.save();
+};
+
+export const restock = async (id, qty) => {
+  const vehicle = await Vehicle.findById(id);
+  if (!vehicle) throw new Error("Not found");
+  vehicle.quantity += qty;
+  return vehicle.save();
+};

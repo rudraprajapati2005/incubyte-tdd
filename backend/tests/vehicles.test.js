@@ -7,6 +7,11 @@ describe("Vehicle API", () => {
     await mongoose.connect(
       process.env.TEST_DB_URI || "mongodb://127.0.0.1:27017/IncubVentTest"
     );
+    const loginRes = await request(app)
+      .post("/api/auth/login")
+      .send({ username: "testadmin", password: "pass123" });
+
+    token = loginRes.body.token;
   });
 
   afterAll(async () => {
@@ -106,6 +111,4 @@ it("should restock a vehicle (admin only)", async () => {
   expect(restockRes.statusCode).toBe(200);
   expect(restockRes.body.quantity).toBe(8);
 });
-
-
 });
