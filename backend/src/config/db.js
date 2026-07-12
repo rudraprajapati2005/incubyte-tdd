@@ -3,6 +3,8 @@ import mongoose from "mongoose";
  const connectDb = async()=>{
     try{
         const conStr = process.env.DATABASE_URL;
+        console.log("Connecting to:", process.env.DATABASE_URL);
+
         if(!conStr)
         {
             throw new Error("Database URL not found");
