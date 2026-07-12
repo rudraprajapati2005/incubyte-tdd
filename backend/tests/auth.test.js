@@ -24,16 +24,16 @@ describe("POST /api/auth/register", () => {
   it("should register a new user and return JWT", async () => {
     const res = await request(app)
       .post("/api/auth/register")
-      .send({ email: "test@example.com", password: "Valid@12356" });
+      .send({ name: "Rudra Prajapati", email: "test@example.com", password: "Valid@12356" });
 
-    // Your controller uses 200, not 201
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(200); // controller uses 200
     expect(res.body).toHaveProperty("token");
   });
-  it("should fail if email is missing ", async () => {
+
+  it("should fail if email is missing", async () => {
     const res = await request(app)
       .post("/api/auth/register")
-      .send({ password: "123456" });
+      .send({ name: "Rudra Prajapati", password: "123456" });
 
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error");
@@ -42,44 +42,43 @@ describe("POST /api/auth/register", () => {
   it("should fail if password is missing", async () => {
     const res = await request(app)
       .post("/api/auth/register")
-      .send({ email: "test@example.com" });
+      .send({ name: "Rudra Prajapati", email: "test@example.com" });
 
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error");
   });
 
-    it("should fail if user already exists", async () => {
+  it("should fail if user already exists", async () => {
     await request(app)
       .post("/api/auth/register")
-      .send({ email: "test@example.com", password: "Valid@12356" });
+      .send({ name: "Rudra Prajapati", email: "test@example.com", password: "Valid@12356" });
 
     const res = await request(app)
       .post("/api/auth/register")
-      .send({ email: "test@example.com", password: "Valid@12356" });
+      .send({ name: "Rudra Prajapati", email: "test@example.com", password: "Valid@12356" });
 
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error", "User already exists");
   });
 
   it("should fail if email format is invalid", async () => {
-  const res = await request(app)
-    .post("/api/auth/register")
-    .send({ email: "invalidEmail", password: "Valid@12356" });
+    const res = await request(app)
+      .post("/api/auth/register")
+      .send({ name: "Rudra Prajapati", email: "invalidEmail", password: "Valid@12356" });
 
-  expect(res.statusCode).toBe(400);
-  expect(res.body).toHaveProperty("error", "Invalid email format");
-});
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error", "Invalid email format");
+  });
+
   it("should fail if password does not meet complexity rules", async () => {
-  const res = await request(app)
-    .post("/api/auth/register")
-    .send({ email: "test@example.com", password: "weakpass" });
+    const res = await request(app)
+      .post("/api/auth/register")
+      .send({ name: "Rudra Prajapati", email: "test@example.com", password: "weakpass" });
 
-  expect(res.statusCode).toBe(400);
-  expect(res.body).toHaveProperty(
-    "error",
-    "Password must be at least 8 characters, contain one uppercase letter, and one special character"
-  );
-});
-
-
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty(
+      "error",
+      "Password must be at least 8 characters, contain one uppercase letter, and one special character"
+    );
+  });
 });

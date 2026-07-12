@@ -4,8 +4,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 export const registerUser = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const result = await AuthService.registerUser({ email, password });
+    const { name, email, password } = req.body;
+    const result = await AuthService.registerUser({ name,email, password });
     res.status(200).json(result); // 201 Created is more RESTful
   } catch (err) {
     next(err);
@@ -14,7 +14,7 @@ export const registerUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const {  email, password } = req.body;
 
     const result = await AuthService.loginUser({ email, password });
     res.status(200).json(result);

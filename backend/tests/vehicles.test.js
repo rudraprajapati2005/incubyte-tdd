@@ -16,7 +16,7 @@ describe("Vehicle API", () => {
     // Login as admin user (already seeded in DB)
     const loginRes = await request(app)
       .post("/api/auth/login")
-      .send({ email: "testadmin@gmail.com", password: "pass123" });
+      .send({ email: "admin@example.com", password: "pass123" });
     console.log("Login response:", loginRes.body);
 
     token = loginRes.body.token;

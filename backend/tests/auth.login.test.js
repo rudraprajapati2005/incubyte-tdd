@@ -17,6 +17,7 @@ describe("POST /api/auth/login", () => {
     // Seed a dummy user for login testing
     const hashedPassword = await bcrypt.hash("Valid@12356", 10);
     await User.create({
+      name: "Rudra Prajapati",
       email: "existinguser@example.com",
       password: hashedPassword,
       role: "user" 
@@ -36,7 +37,7 @@ describe("POST /api/auth/login", () => {
     expect(res.body).toHaveProperty("token");
   });
 
-   it("should fail if email or password fields are missing", async () => {
+  it("should fail if email or password fields are missing", async () => {
     const res = await request(app)
       .post("/api/auth/login")
       .send({ email: "existinguser@example.com" }); // Missing password
@@ -44,6 +45,7 @@ describe("POST /api/auth/login", () => {
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error");
   });
+
   it("should fail if the email does not exist", async () => {
     const res = await request(app)
       .post("/api/auth/login")
@@ -52,6 +54,4 @@ describe("POST /api/auth/login", () => {
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error", "Invalid credentials");
   });
-
-
 });

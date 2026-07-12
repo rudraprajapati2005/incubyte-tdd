@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import * as userRepository from "../repository/user.repository.js";
 import ErrorResponse from "../errorHandler/errorResponse.js";
 class AuthService {
-  async registerUser({ email, password }) {
+  async registerUser({ name,email, password }) {
     const existing = await userRepository.findByEmail( email );
     if (existing) {
       //added the custom error Response
@@ -14,7 +14,7 @@ class AuthService {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Creating the new User
-    const user = await userRepository.create({ email, password: hashedPassword });
+    const user = await userRepository.create({ name,email, password: hashedPassword });
 
     // Generate JWT ()
     const token = jwt.sign(
