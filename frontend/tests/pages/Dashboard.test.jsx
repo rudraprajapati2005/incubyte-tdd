@@ -1,7 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import Dashboard from '../../src/pages/Dashboard';
+import Admin from '../../src/pages/Admin';
 import { ToastProvider } from '../../src/context/ToastContext';
 
 vi.mock('../../src/context/AuthContext', () => ({
@@ -30,6 +32,26 @@ function setup({ isAdmin = false } = {}) {
   fetchVehicles.mockResolvedValue(vehicles);
 }
 
+function renderDashboard() {
+  return render(
+    <MemoryRouter>
+      <ToastProvider>
+        <Dashboard />
+      </ToastProvider>
+    </MemoryRouter>
+  );
+}
+
+function renderAdmin() {
+  return render(
+    <MemoryRouter>
+      <ToastProvider>
+        <Admin />
+      </ToastProvider>
+    </MemoryRouter>
+  );
+}
+
 beforeEach(() => {
   vi.clearAllMocks();
 });
@@ -37,7 +59,7 @@ beforeEach(() => {
 describe('Dashboard', () => {
   it('loads and displays vehicles from the API', async () => {
     setup();
-    render(<ToastProvider><Dashboard /></ToastProvider>);
+    renderDashboard();
 
     expect(await screen.findByText(/Toyota Camry/)).toBeInTheDocument();
     expect(screen.getByText(/Ford F-150/)).toBeInTheDocument();
@@ -46,7 +68,7 @@ describe('Dashboard', () => {
 
   it('shows a sold-out vehicle with a disabled purchase button', async () => {
     setup();
-    render(<ToastProvider><Dashboard /></ToastProvider>);
+    renderDashboard();
     await screen.findByText(/Ford F-150/);
 
     const fordCard = screen.getByText(/Ford F-150/).closest('article');
@@ -58,7 +80,7 @@ describe('Dashboard', () => {
     setup();
     purchaseVehicle.mockResolvedValueOnce({ ...vehicles[0], quantity: 2 });
 
-    render(<ToastProvider><Dashboard /></ToastProvider>);
+    renderDashboard();
     await screen.findByText(/Toyota Camry/);
 
     const camryCard = screen.getByText(/Toyota Camry/).closest('article');
@@ -70,7 +92,7 @@ describe('Dashboard', () => {
 
   it('does not show admin controls for a regular user', async () => {
     setup({ isAdmin: false });
-    render(<ToastProvider><Dashboard /></ToastProvider>);
+    renderDashboard();
     await screen.findByText(/Toyota Camry/);
 
     expect(screen.queryByRole('button', { name: /add vehicle/i })).not.toBeInTheDocument();
@@ -88,10 +110,10 @@ describe('Dashboard', () => {
       quantity: 5,
     });
 
-    render(<ToastProvider><Dashboard /></ToastProvider>);
+    renderAdmin();
     await screen.findByText(/Toyota Camry/);
 
-    await user.click(screen.getAllByRole('button', { name: /add vehicle/i })[0]);
+    await user.click(screen.getByRole('button', { name: /add vehicle/i }));
     await user.type(screen.getByPlaceholderText('Toyota'), 'Kia');
     await user.type(screen.getByPlaceholderText('Camry'), 'Soul');
     await user.type(screen.getByPlaceholderText('24999'), '18000');
@@ -105,7 +127,7 @@ describe('Dashboard', () => {
   it('shows an empty state message when there are no vehicles', async () => {
     setup();
     fetchVehicles.mockResolvedValue([]);
-    render(<ToastProvider><Dashboard /></ToastProvider>);
+    renderDashboard();
 
     expect(await screen.findByText(/the lot is empty/i)).toBeInTheDocument();
   });

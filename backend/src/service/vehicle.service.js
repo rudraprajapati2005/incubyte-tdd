@@ -1,4 +1,5 @@
 import * as vehicleRepository from  "../repository/vehicle.repository.js";
+import ErrorResponse from "../errorHandler/errorResponse.js";
 
 
 class VehicleService {

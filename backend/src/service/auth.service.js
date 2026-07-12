@@ -2,6 +2,16 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import * as userRepository from "../repository/user.repository.js";
 import ErrorResponse from "../errorHandler/errorResponse.js";
+
+function toUserPayload(user) {
+    return {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+    };
+}
+
 class AuthService {
   async registerUser({ name,email, password }) {
     const existing = await userRepository.findByEmail( email );
@@ -23,11 +33,11 @@ class AuthService {
       { expiresIn: "1d" }
     );
 
-    return { token };
+        return { token, user: toUserPayload(user) };
   }
 
   async loginUser({ email, password }) {
-    console.log("YO ");
+ 
     if (!password) {
         throw new ErrorResponse(
             "INVALID_PASSWORD",
@@ -35,9 +45,9 @@ class AuthService {
             400
         );
     }
-     console.log("YO 2 "  + email);
+    
     const user = await userRepository.findByEmail(email);
-     console.log("YO 3" + user);
+     
     if (!user) {
         throw new ErrorResponse(
             "INVALID_CREDENTIALS",
@@ -72,7 +82,7 @@ class AuthService {
         }
     );
     console.log("here3");
-    return { token };
+    return { token, user: toUserPayload(user) };
 }
 }
 export  default new AuthService();

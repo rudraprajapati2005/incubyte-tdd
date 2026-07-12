@@ -12,7 +12,8 @@ import {
 import {authMiddleware , adminOnly } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
-router.post("/", authMiddleware, addVehicle);
+// Inventory management is admin-only; regular users can browse and purchase.
+router.post("/", authMiddleware, adminOnly, addVehicle);
 router.get("/", authMiddleware,getVehicles);
 router.put("/:id",authMiddleware , adminOnly,putVehicle);
 router.get("/search",authMiddleware ,searchVehicles);

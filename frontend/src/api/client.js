@@ -172,13 +172,13 @@ function normalizeVehicle(v) {
 }
 
 export async function fetchVehicles() {
-  const data = await request('/vehicles', { auth: false });
+  const data = await request('/vehicles', { auth: true });
   return normalizeList(data).map(normalizeVehicle);
 }
 
 export async function searchVehicles({ make, model, category, minPrice, maxPrice } = {}) {
   const data = await request('/vehicles/search', {
-    auth: false,
+    auth: true,
     params: { make, model, category, minPrice, maxPrice },
   });
   return normalizeList(data).map(normalizeVehicle);

@@ -1,34 +1,47 @@
+import { NavLink } from 'react-router-dom';
 import { LogOut, Wrench } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-export default function Navbar({ onAddVehicle }) {
+const navLinkClass = ({ isActive }) =>
+  [
+    'focus-ring rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+    isActive
+      ? 'bg-signal text-asphalt-900'
+      : 'text-asphalt-200 hover:text-concrete hover:bg-asphalt-700',
+  ].join(' ');
+
+export default function Navbar() {
   const { user, isAdmin, isAuthenticated, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 bg-asphalt-800 border-b-4 border-signal shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2.5 shrink-0">
           <span className="inline-flex h-8 w-8 items-center justify-center rounded bg-signal text-asphalt-900 font-display font-bold text-lg">
             L
           </span>
           <span className="font-display text-2xl tracking-wide text-concrete uppercase">
             Lotline
           </span>
-          <span className="hidden sm:inline text-xs font-mono text-asphalt-300 border border-asphalt-500 rounded px-1.5 py-0.5 ml-1">
-            Inventory
-          </span>
         </div>
 
-        <div className="flex items-center gap-3">
-          {isAdmin && (
-            <button
-              onClick={onAddVehicle}
-              className="focus-ring hidden sm:inline-flex items-center gap-1.5 rounded-md bg-signal text-asphalt-900 font-body font-semibold text-sm px-3.5 py-2 hover:bg-signal-dim transition-colors"
-            >
-              <Wrench size={15} strokeWidth={2.5} />
-              Add vehicle
-            </button>
-          )}
+        {isAuthenticated && (
+          <nav className="hidden sm:flex items-center gap-1.5">
+            <NavLink to="/" end className={navLinkClass}>
+              The lot
+            </NavLink>
+            {isAdmin && (
+              <NavLink to="/admin" className={navLinkClass}>
+                <span className="inline-flex items-center gap-1.5">
+                  <Wrench size={13} strokeWidth={2.5} />
+                  Manage inventory
+                </span>
+              </NavLink>
+            )}
+          </nav>
+        )}
+
+        <div className="flex items-center gap-3 shrink-0">
           {isAuthenticated && (
             <div className="flex items-center gap-3">
               <div className="hidden md:flex flex-col items-end leading-tight">
@@ -48,6 +61,19 @@ export default function Navbar({ onAddVehicle }) {
           )}
         </div>
       </div>
+
+      {isAuthenticated && (
+        <nav className="sm:hidden flex items-center gap-1.5 px-4 pb-2.5">
+          <NavLink to="/" end className={navLinkClass}>
+            The lot
+          </NavLink>
+          {isAdmin && (
+            <NavLink to="/admin" className={navLinkClass}>
+              Manage inventory
+            </NavLink>
+          )}
+        </nav>
+      )}
     </header>
   );
 }

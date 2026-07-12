@@ -1,36 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CarFront } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import {
-  createVehicle,
-  deleteVehicle,
-  fetchVehicles,
-  purchaseVehicle,
-  restockVehicle,
-  searchVehicles,
-  updateVehicle,
-} from '../api/client';
+import { fetchVehicles, purchaseVehicle, searchVehicles } from '../api/client';
 import Navbar from '../components/Navbar';
 import SearchBar from '../components/SearchBar';
 import VehicleCard from '../components/VehicleCard';
-import VehicleFormModal from '../components/VehicleFormModal';
-import { ConfirmDialog, RestockDialog } from '../components/Dialogs';
 
 const emptyFilters = { q: '', category: '', minPrice: '', maxPrice: '' };
 
 export default function Dashboard() {
-  const { isAdmin } = useAuth();
   const { push } = useToast();
 
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
   const [filters, setFilters] = useState(emptyFilters);
-
-  const [formTarget, setFormTarget] = useState(undefined); // undefined=closed, null=add, obj=edit
-  const [deleteTarget, setDeleteTarget] = useState(null);
-  const [restockTarget, setRestockTarget] = useState(null);
 
   const hasActiveFilters =
     filters.category || filters.minPrice || filters.maxPrice || filters.q;
@@ -88,69 +72,18 @@ export default function Dashboard() {
     }
   };
 
-  const handleFormSubmit = async (data) => {
-    try {
-      if (formTarget && formTarget.id) {
-        const updated = await updateVehicle(formTarget.id, data);
-        setVehicles((prev) => prev.map((v) => (v.id === formTarget.id ? { ...v, ...updated } : v)));
-        push('Vehicle updated.', 'success');
-      } else {
-        const created = await createVehicle(data);
-        setVehicles((prev) => [created, ...prev]);
-        push('Vehicle added to the lot.', 'success');
-      }
-      setFormTarget(undefined);
-    } catch (err) {
-      push(err.message, 'error');
-    }
-  };
-
-  const handleDelete = async () => {
-    try {
-      await deleteVehicle(deleteTarget.id);
-      setVehicles((prev) => prev.filter((v) => v.id !== deleteTarget.id));
-      push('Vehicle removed.', 'success');
-      setDeleteTarget(null);
-    } catch (err) {
-      push(err.message, 'error');
-    }
-  };
-
-  const handleRestock = async (amount) => {
-    try {
-      const updated = await restockVehicle(restockTarget.id, amount);
-      setVehicles((prev) =>
-        prev.map((v) => (v.id === restockTarget.id ? { ...v, ...updated } : v))
-      );
-      push(`Restocked ${restockTarget.make} ${restockTarget.model}.`, 'success');
-      setRestockTarget(null);
-    } catch (err) {
-      push(err.message, 'error');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-concrete">
-      <Navbar onAddVehicle={() => setFormTarget(null)} />
+      <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-5">
-        <div className="flex items-center justify-between flex-wrap gap-3">
-          <div>
-            <h1 className="font-display text-3xl uppercase text-asphalt-800 tracking-wide">
-              The lot
-            </h1>
-            <p className="text-asphalt-400 text-sm mt-0.5">
-              Browse available inventory, updated in real time.
-            </p>
-          </div>
-          {isAdmin && (
-            <button
-              onClick={() => setFormTarget(null)}
-              className="focus-ring sm:hidden inline-flex items-center gap-1.5 rounded-md bg-signal text-asphalt-900 font-semibold text-sm px-3.5 py-2.5"
-            >
-              Add vehicle
-            </button>
-          )}
+        <div>
+          <h1 className="font-display text-3xl uppercase text-asphalt-800 tracking-wide">
+            The lot
+          </h1>
+          <p className="text-asphalt-400 text-sm mt-0.5">
+            Browse available inventory, updated in real time.
+          </p>
         </div>
 
         <SearchBar
@@ -176,43 +109,13 @@ export default function Dashboard() {
               <VehicleCard
                 key={vehicle.id}
                 vehicle={vehicle}
-                isAdmin={isAdmin}
+                isAdmin={false}
                 onPurchase={handlePurchase}
-                onEdit={(v) => setFormTarget(v)}
-                onDelete={(v) => setDeleteTarget(v)}
-                onRestock={(v) => setRestockTarget(v)}
               />
             ))}
           </div>
         )}
       </main>
-
-      {formTarget !== undefined && (
-        <VehicleFormModal
-          vehicle={formTarget}
-          onClose={() => setFormTarget(undefined)}
-          onSubmit={handleFormSubmit}
-        />
-      )}
-
-      {deleteTarget && (
-        <ConfirmDialog
-          title="Delete vehicle?"
-          message={`This will permanently remove the ${deleteTarget.make} ${deleteTarget.model} from the lot.`}
-          confirmLabel="Delete"
-          danger
-          onConfirm={handleDelete}
-          onClose={() => setDeleteTarget(null)}
-        />
-      )}
-
-      {restockTarget && (
-        <RestockDialog
-          vehicle={restockTarget}
-          onClose={() => setRestockTarget(null)}
-          onSubmit={handleRestock}
-        />
-      )}
     </div>
   );
 }

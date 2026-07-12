@@ -1,23 +1,31 @@
 import mongoose from "mongoose";
 import request from "supertest";
 import app from "../src/app.js";
+import User from "../src/models/User.js";
+import bcrypt from "bcryptjs";
 
 let token; // store JWT
 // jest.setup.js
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.test" });
- console.log.print
 describe("Vehicle API", () => {
   beforeAll(async () => {
     await mongoose.connect(
       process.env.TEST_DB_URI || "mongodb://127.0.0.1:27017/IncubVentTest"
     );
 
-    // Login as admin user (already seeded in DB)
+    await User.deleteMany({ email: "admin@example.com" });
+    const hashedPassword = await bcrypt.hash("pass123", 10);
+    await User.create({
+      name: "Admin User",
+      email: "admin@example.com",
+      password: hashedPassword,
+      role: "admin",
+    });
+
     const loginRes = await request(app)
       .post("/api/auth/login")
       .send({ email: "admin@example.com", password: "pass123" });
-    console.log("Login response:", loginRes.body);
 
     token = loginRes.body.token;
   });
