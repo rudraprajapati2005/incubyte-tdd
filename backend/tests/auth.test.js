@@ -24,7 +24,7 @@ describe("POST /api/auth/register", () => {
   it("should register a new user and return JWT", async () => {
     const res = await request(app)
       .post("/api/auth/register")
-      .send({ name: "Rudra Prajapati", email: "test@example.com", password: "Valid@12356" });
+      .send({ name : "Rudra Prajapati", email: "test@example.com", password: "Valid@12356" });
 
     expect(res.statusCode).toBe(200); // controller uses 200
     expect(res.body).toHaveProperty("token");

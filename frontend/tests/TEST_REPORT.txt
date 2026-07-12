@@ -1,0 +1,45 @@
+
+ RUN  v4.1.10 /home/claude/dealership-frontend
+      Coverage enabled with v8
+
+ ✓ tests/pages/Dashboard.test.jsx (6 tests) 2853ms
+     ✓ loads and displays vehicles from the API  397ms
+     ✓ shows a sold-out vehicle with a disabled purchase button  509ms
+     ✓ purchases a vehicle and reflects the updated quantity  448ms
+     ✓ does not show admin controls for a regular user  407ms
+     ✓ lets an admin add a new vehicle through the form modal  764ms
+     ✓ shows an empty state message when there are no vehicles  324ms
+ ✓ tests/components/VehicleCard.test.jsx (8 tests) 416ms
+ ✓ tests/components/SearchBar.test.jsx (5 tests) 390ms
+ ✓ tests/context/AuthContext.test.jsx (4 tests) 319ms
+ ✓ tests/api/client.test.js (18 tests) 22ms
+
+ Test Files  5 passed (5)
+      Tests  41 passed (41)
+   Start at  03:51:41
+   Duration  12.63s (transform 357ms, setup 1.33s, import 976ms, tests 4.00s, environment 4.66s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   61.83 |    58.21 |   55.28 |   63.77 |                   
+ src               |       0 |        0 |       0 |       0 |                   
+  App.jsx          |       0 |        0 |       0 |       0 | 9-56              
+ src/api           |    96.1 |    71.08 |   95.45 |   98.48 |                   
+  client.js        |    96.1 |    71.08 |   95.45 |   98.48 | 50                
+ src/components    |   60.43 |    60.86 |   57.89 |   64.28 |                   
+  AuthLayout.jsx   |       0 |      100 |       0 |       0 | 2-46              
+  Dialogs.jsx      |       0 |        0 |       0 |       0 | 5-98              
+  Navbar.jsx       |     100 |      100 |     100 |     100 |                   
+  SearchBar.jsx    |   72.72 |    93.75 |    62.5 |      70 | 55,69-77          
+  VehicleCard.jsx  |   85.71 |    96.87 |   66.66 |   85.71 | 57,124            
+  ...FormModal.jsx |   80.48 |    42.85 |   85.71 |   91.66 | 16,102,116        
+ src/context       |   81.81 |    61.53 |    62.5 |   89.58 |                   
+  AuthContext.jsx  |   88.57 |    66.66 |   83.33 |    90.9 | 42-43,63          
+  ToastContext.jsx |      70 |    57.14 |      50 |   86.66 | 11,42             
+ src/pages         |    38.4 |       40 |   34.88 |   38.26 |                   
+  Dashboard.jsx    |   57.14 |    57.77 |   45.45 |   58.66 | ...48-172,181-212 
+  Login.jsx        |       0 |        0 |       0 |       0 | 8-57              
+  Register.jsx     |       0 |        0 |       0 |       0 | 9-99              
+-------------------|---------|----------|---------|---------|-------------------

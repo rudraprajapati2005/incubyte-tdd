@@ -27,7 +27,7 @@ class AuthService {
   }
 
   async loginUser({ email, password }) {
-
+    console.log("YO ");
     if (!password) {
         throw new ErrorResponse(
             "INVALID_PASSWORD",
@@ -35,7 +35,9 @@ class AuthService {
             400
         );
     }
+     console.log("YO 2 "  + email);
     const user = await userRepository.findByEmail(email);
+     console.log("YO 3" + user);
     if (!user) {
         throw new ErrorResponse(
             "INVALID_CREDENTIALS",
@@ -43,6 +45,8 @@ class AuthService {
             400
         );
     }
+     console.log("YO 5");
+    console.log("here1");
     const isPasswordValid = await bcrypt.compare(
         password,
         user.password
@@ -54,6 +58,8 @@ class AuthService {
             400
         );
     }
+    
+    console.log("here2");
     const token = jwt.sign(
         {
             id: user._id,
@@ -65,6 +71,7 @@ class AuthService {
             expiresIn: "1d"
         }
     );
+    console.log("here3");
     return { token };
 }
 }
