@@ -24,8 +24,8 @@
  */
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-const TOKEN_KEY = 'lotline_token';
-const USER_KEY = 'lotline_user';
+const TOKEN_KEY = 'IncubVent_token';
+const USER_KEY = 'IncubVent_user';
 
 export function getToken() {
   return localStorage.getItem(TOKEN_KEY);

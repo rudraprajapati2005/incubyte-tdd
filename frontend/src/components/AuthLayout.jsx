@@ -7,7 +7,7 @@ export default function AuthLayout({ eyebrow, title, subtitle, children }) {
           <span className="inline-flex h-9 w-9 items-center justify-center rounded bg-signal text-asphalt-900 font-display font-bold text-xl">
             L
           </span>
-          <span className="font-display text-2xl tracking-wide uppercase">Lotline</span>
+          <span className="font-display text-2xl tracking-wide uppercase">IncubVent</span>
         </div>
 
         <div className="relative z-10">
@@ -32,7 +32,7 @@ export default function AuthLayout({ eyebrow, title, subtitle, children }) {
               L
             </span>
             <span className="font-display text-2xl tracking-wide uppercase text-asphalt-800">
-              Lotline
+              IncubVent
             </span>
           </div>
           {children}

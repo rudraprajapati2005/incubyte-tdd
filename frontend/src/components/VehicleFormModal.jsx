@@ -1,9 +1,23 @@
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 
-const CATEGORIES = ['Sedan', 'SUV', 'Truck', 'Coupe', 'Hatchback', 'Convertible', 'Van'];
+const CATEGORIES = ["SEDAN",
+        "HATCHBACK",
+        "SUV",
+        "COMPACT_SUV",
+        "COUPE",
+        "CONVERTIBLE",
+        "PICKUP",
+        "MPV",
+        "WAGON",
+        "CROSSOVER",
+        "SPORTS",
+        "LUXURY",
+        "ELECTRIC",
+        "HYBRID",
+        "OFF_ROAD",];
 
-const emptyForm = { make: '', model: '', category: 'Sedan', price: '', quantity: '', year: '' };
+const emptyForm = { make: '', model: '', category: 'SEDAN', price: '', quantity: '', year: '' };
 
 export default function VehicleFormModal({ vehicle, onClose, onSubmit }) {
   const [form, setForm] = useState(emptyForm);
@@ -16,7 +30,7 @@ export default function VehicleFormModal({ vehicle, onClose, onSubmit }) {
       setForm({
         make: vehicle.make ?? '',
         model: vehicle.model ?? '',
-        category: vehicle.category ?? 'Sedan',
+        category: vehicle.category ?? 'SEDAN',
         price: vehicle.price ?? '',
         quantity: vehicle.quantity ?? '',
         year: vehicle.year ?? '',
@@ -121,7 +135,7 @@ export default function VehicleFormModal({ vehicle, onClose, onSubmit }) {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Price ($)" error={errors.price}>
+            <Field label="Price (₹)" error={errors.price}>
               <input
                 type="number"
                 min="0"

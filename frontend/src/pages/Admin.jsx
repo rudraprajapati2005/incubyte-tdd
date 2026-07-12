@@ -50,6 +50,8 @@ export default function Admin() {
         setVehicles((prev) => [created, ...prev]);
         push('Vehicle added to the lot.', 'success');
       }
+
+      await load();
       setFormTarget(undefined);
     } catch (err) {
       push(err.message, 'error');

@@ -71,7 +71,7 @@ export default function Login() {
       </form>
 
       <p className="text-sm text-asphalt-400 mt-6 text-center">
-        New to Lotline?{' '}
+        New to IncubVent?{' '}
         <Link to="/register" className="text-asphalt-800 font-semibold hover:text-signal-dim underline underline-offset-2">
           Create an account
         </Link>

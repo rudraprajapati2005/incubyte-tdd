@@ -1,8 +1,23 @@
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { useState } from 'react';
 
-const CATEGORIES = ['Sedan', 'SUV', 'Truck', 'Coupe', 'Hatchback', 'Convertible', 'Van'];
-
+const CATEGORIES = [
+  "SEDAN",
+        "HATCHBACK",
+        "SUV",
+        "COMPACT_SUV",
+        "COUPE",
+        "CONVERTIBLE",
+        "PICKUP",
+        "MPV",
+        "WAGON",
+        "CROSSOVER",
+        "SPORTS",
+        "LUXURY",
+        "ELECTRIC",
+        "HYBRID",
+        "OFF_ROAD",
+]
 export default function SearchBar({ filters, onChange, onReset, resultCount }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -67,7 +82,7 @@ export default function SearchBar({ filters, onChange, onReset, resultCount }) {
             min="0"
             value={filters.minPrice}
             onChange={(e) => onChange({ ...filters, minPrice: e.target.value })}
-            placeholder="Min price ($)"
+            placeholder="Min price (₹)"
             className="focus-ring bg-asphalt-700 text-concrete placeholder:text-asphalt-300 text-sm rounded-md px-3 py-2 border border-transparent focus:border-signal"
           />
           <input
@@ -75,7 +90,7 @@ export default function SearchBar({ filters, onChange, onReset, resultCount }) {
             min="0"
             value={filters.maxPrice}
             onChange={(e) => onChange({ ...filters, maxPrice: e.target.value })}
-            placeholder="Max price ($)"
+            placeholder="Max price (₹)"
             className="focus-ring bg-asphalt-700 text-concrete placeholder:text-asphalt-300 text-sm rounded-md px-3 py-2 border border-transparent focus:border-signal"
           />
         </div>

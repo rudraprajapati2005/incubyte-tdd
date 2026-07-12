@@ -55,8 +55,6 @@ class AuthService {
             400
         );
     }
-     console.log("YO 5");
-    console.log("here1");
     const isPasswordValid = await bcrypt.compare(
         password,
         user.password
@@ -64,7 +62,7 @@ class AuthService {
     if (!isPasswordValid) {
         throw new ErrorResponse(
             "INVALID_CREDENTIALS",
-            "Invalid credentials",
+            "Invalid credentials yo",
             400
         );
     }

@@ -1,20 +1,42 @@
 import { useState } from 'react';
 import { Pencil, PackagePlus, Trash2, ShoppingCart } from 'lucide-react';
+import { ConfirmDialog } from './Dialogs';
 
 const CATEGORY_COLORS = {
-  sedan: 'bg-lot/15 text-lot border-lot/30',
-  suv: 'bg-signal/15 text-signal-dim border-signal/30',
-  truck: 'bg-racing/15 text-racing border-racing/30',
-  coupe: 'bg-asphalt-500/40 text-chrome border-chrome/30',
-  default: 'bg-asphalt-500/40 text-chrome border-chrome/30',
+  SEDAN: 'bg-green-500/15 text-green-400 border-green-500/30',
+  HATCHBACK: 'bg-red-500/15 text-red-400 border-red-500/30',
+  SUV: 'bg-yellow-500/15 text-yellow-400 border-yellow-500/30',
+  COMPACT_SUV: 'bg-orange-500/15 text-orange-400 border-orange-500/30',
+  COUPE: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
+  CONVERTIBLE: 'bg-purple-500/15 text-purple-400 border-purple-500/30',
+  PICKUP: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+  MPV: 'bg-pink-500/15 text-pink-400 border-pink-500/30',
+  WAGON: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30',
+  CROSSOVER: 'bg-cyan-500/15 text-cyan-400 border-cyan-500/30',
+  SPORTS: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+  LUXURY: 'bg-violet-500/15 text-violet-400 border-violet-500/30',
+  ELECTRIC: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+  HYBRID: 'bg-lime-500/15 text-lime-400 border-lime-500/30',
+  OFF_ROAD: 'bg-stone-500/15 text-stone-300 border-stone-500/30',
+  default: 'bg-gray-500/15 text-gray-300 border-gray-500/30',
 };
 
 function categoryClass(category) {
   return CATEGORY_COLORS[category?.toLowerCase()] ?? CATEGORY_COLORS.default;
 }
 
+function formatCategory(category) {
+  if (!category) return 'Uncategorized';
+  return category
+    .toLowerCase()
+    .split('_')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
 export default function VehicleCard({ vehicle, isAdmin, onPurchase, onEdit, onDelete, onRestock }) {
   const [purchasing, setPurchasing] = useState(false);
+  const [showPurchaseConfirm, setShowPurchaseConfirm] = useState(false);
   const soldOut = vehicle.quantity <= 0;
   const lowStock = vehicle.quantity > 0 && vehicle.quantity <= 2;
 
@@ -24,6 +46,20 @@ export default function VehicleCard({ vehicle, isAdmin, onPurchase, onEdit, onDe
       await onPurchase(vehicle);
     } finally {
       setPurchasing(false);
+    }
+  };
+
+  const openPurchaseConfirm = () => {
+    if (soldOut || purchasing) return;
+    setShowPurchaseConfirm(true);
+  };
+
+  const confirmPurchase = async () => {
+    try {
+      await handlePurchase();
+      setShowPurchaseConfirm(false);
+    } catch {
+      // Parent handler handles errors through toasts; keep dialog open only on failure.
     }
   };
 
@@ -80,7 +116,7 @@ export default function VehicleCard({ vehicle, isAdmin, onPurchase, onEdit, onDe
               vehicle.category
             )}`}
           >
-            {vehicle.category || 'Uncategorized'}
+            {formatCategory(vehicle.category)}
           </span>
           <span
             className={`text-[11px] font-body font-medium flex items-center gap-1 ${
@@ -101,13 +137,13 @@ export default function VehicleCard({ vehicle, isAdmin, onPurchase, onEdit, onDe
             Sticker price
           </p>
           <p className="font-mono text-3xl font-bold text-asphalt-800 tabular-nums">
-            ${Number(vehicle.price).toLocaleString()}
+            ₹{Number(vehicle.price).toLocaleString()}
           </p>
         </div>
 
         <div className="mt-auto pt-2 flex gap-2">
           <button
-            onClick={handlePurchase}
+            onClick={openPurchaseConfirm}
             disabled={soldOut || purchasing}
             className={[
               'focus-ring flex-1 inline-flex items-center justify-center gap-1.5 rounded-md font-body font-semibold text-sm py-2.5 transition-colors',
@@ -131,6 +167,33 @@ export default function VehicleCard({ vehicle, isAdmin, onPurchase, onEdit, onDe
           )}
         </div>
       </div>
+
+      {showPurchaseConfirm && (
+        <ConfirmDialog
+          title="Purchase item?"
+          message="Are you sure you want to purchase the item?"
+          confirmLabel="Yes"
+          cancelLabel="No"
+          onConfirm={confirmPurchase}
+          onClose={() => setShowPurchaseConfirm(false)}
+        >
+          <div className="mt-3 rounded-md border border-asphalt-200 bg-asphalt-50 p-3 text-sm text-asphalt-600">
+            <p className="font-medium text-asphalt-800">
+              {vehicle.year ? `${vehicle.year} ` : ''}
+              {vehicle.make} {vehicle.model}
+            </p>
+            <div className="mt-2 flex items-center justify-between gap-3">
+              <span className="uppercase tracking-wider text-[11px] text-asphalt-400">Price</span>
+              <span className="font-mono text-lg font-bold text-lot tabular-nums">
+                ₹{Number(vehicle.price).toLocaleString()}
+              </span>
+            </div>
+            <p className="mt-2 text-xs text-asphalt-500">
+              Category: {formatCategory(vehicle.category)} · {vehicle.quantity} in stock
+            </p>
+          </div>
+        </ConfirmDialog>
+      )}
     </article>
   );
 }

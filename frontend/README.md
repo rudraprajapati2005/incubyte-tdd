@@ -1,4 +1,4 @@
-# Lotline — Car Dealership Inventory Frontend
+# IncubVent — Car Dealership Inventory Frontend
 
 A single-page React application for the Car Dealership Inventory System kata.
 Built with **React 18 + Vite + Tailwind CSS + React Router**.
@@ -107,7 +107,7 @@ assumptions below.
 
 ```bash
 npm install
-npm run dev       # starts on http://localhost:5173
+npm run dev       # starts on http://localhost:3000
 ```
 
 Make sure your backend is running and CORS-enabled for the frontend's

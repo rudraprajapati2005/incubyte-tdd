@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import VehicleCard from '../../src/components/VehicleCard';
 
@@ -7,7 +7,7 @@ const baseVehicle = {
   id: 'abc123',
   make: 'Toyota',
   model: 'Camry',
-  category: 'Sedan',
+  category: 'SEDAN',
   price: 24999,
   quantity: 3,
   year: 2026,
@@ -30,7 +30,7 @@ describe('VehicleCard', () => {
     renderCard();
     expect(screen.getByText(/Toyota Camry/)).toBeInTheDocument();
     expect(screen.getByText('Sedan')).toBeInTheDocument();
-    expect(screen.getByText('$24,999')).toBeInTheDocument();
+    expect(screen.getByText('₹24,999')).toBeInTheDocument();
   });
 
   it('shows quantity in stock when available', () => {
@@ -50,11 +50,19 @@ describe('VehicleCard', () => {
     expect(screen.getAllByText(/sold out/i).length).toBeGreaterThan(0);
   });
 
-  it('calls onPurchase with the vehicle when Purchase is clicked', async () => {
+  it('shows a purchase confirmation before calling onPurchase', async () => {
     const user = userEvent.setup();
     const handlers = renderCard({ quantity: 2 });
 
     await user.click(screen.getByRole('button', { name: /purchase/i }));
+
+    const dialog = screen.getByRole('alertdialog');
+    expect(dialog).toBeInTheDocument();
+    expect(within(dialog).getByText(/are you sure you want to purchase the item/i)).toBeInTheDocument();
+    expect(within(dialog).getByText('$24,999')).toBeInTheDocument();
+    expect(handlers.onPurchase).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole('button', { name: /yes/i }));
 
     expect(handlers.onPurchase).toHaveBeenCalledWith(expect.objectContaining({ id: 'abc123' }));
   });

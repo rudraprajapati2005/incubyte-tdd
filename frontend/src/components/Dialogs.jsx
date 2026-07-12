@@ -1,7 +1,17 @@
+import { createPortal } from 'react-dom';
 import { useState } from 'react';
 import { AlertTriangle, PackagePlus, X } from 'lucide-react';
 
-export function ConfirmDialog({ title, message, confirmLabel = 'Confirm', danger, onConfirm, onClose }) {
+export function ConfirmDialog({
+  title,
+  message,
+  children,
+  confirmLabel = 'Confirm',
+  cancelLabel = 'Cancel',
+  danger,
+  onConfirm,
+  onClose,
+}) {
   const [busy, setBusy] = useState(false);
   const handleConfirm = async () => {
     setBusy(true);
@@ -11,7 +21,7 @@ export function ConfirmDialog({ title, message, confirmLabel = 'Confirm', danger
       setBusy(false);
     }
   };
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-asphalt-900/70 backdrop-blur-sm p-4"
       role="alertdialog"
@@ -23,9 +33,10 @@ export function ConfirmDialog({ title, message, confirmLabel = 'Confirm', danger
           <span className={`p-2 rounded-full ${danger ? 'bg-racing/10 text-racing' : 'bg-signal/15 text-signal-dim'}`}>
             <AlertTriangle size={18} />
           </span>
-          <div>
+          <div className="min-w-0 flex-1">
             <h3 className="font-display text-lg uppercase tracking-wide text-asphalt-800">{title}</h3>
-            <p className="text-sm text-asphalt-500 mt-1">{message}</p>
+            {message && <p className="text-sm text-asphalt-500 mt-1">{message}</p>}
+            {children}
           </div>
         </div>
         <div className="flex gap-2 mt-5">
@@ -33,7 +44,7 @@ export function ConfirmDialog({ title, message, confirmLabel = 'Confirm', danger
             onClick={onClose}
             className="focus-ring flex-1 rounded-md border border-asphalt-200 text-asphalt-600 font-medium text-sm py-2.5 hover:bg-asphalt-50"
           >
-            Cancel
+            {cancelLabel}
           </button>
           <button
             onClick={handleConfirm}
@@ -46,7 +57,8 @@ export function ConfirmDialog({ title, message, confirmLabel = 'Confirm', danger
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

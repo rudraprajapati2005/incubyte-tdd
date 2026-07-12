@@ -21,7 +21,7 @@ export default function Navbar() {
             L
           </span>
           <span className="font-display text-2xl tracking-wide text-concrete uppercase">
-            Lotline
+            IncubVent
           </span>
         </div>
 

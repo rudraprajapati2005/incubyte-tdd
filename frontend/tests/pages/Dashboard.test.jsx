@@ -23,8 +23,8 @@ import { useAuth } from '../../src/context/AuthContext';
 import { fetchVehicles, purchaseVehicle, createVehicle } from '../../src/api/client';
 
 const vehicles = [
-  { id: '1', make: 'Toyota', model: 'Camry', category: 'Sedan', price: 24999, quantity: 3, year: 2026 },
-  { id: '2', make: 'Ford', model: 'F-150', category: 'Truck', price: 41000, quantity: 0, year: 2025 },
+  { id: '1', make: 'Toyota', model: 'Camry', category: 'SEDAN', price: 24999, quantity: 3, year: 2026 },
+  { id: '2', make: 'Ford', model: 'F-150', category: 'PICKUP', price: 41000, quantity: 0, year: 2025 },
 ];
 
 function setup({ isAdmin = false } = {}) {
@@ -85,6 +85,7 @@ describe('Dashboard', () => {
 
     const camryCard = screen.getByText(/Toyota Camry/).closest('article');
     await user.click(within(camryCard).getByRole('button', { name: /purchase/i }));
+    await user.click(screen.getByRole('button', { name: /yes/i }));
 
     await waitFor(() => expect(purchaseVehicle).toHaveBeenCalledWith('1', 1));
     await waitFor(() => expect(within(camryCard).getByText('2 in stock')).toBeInTheDocument());
@@ -105,10 +106,15 @@ describe('Dashboard', () => {
       id: '3',
       make: 'Kia',
       model: 'Soul',
-      category: 'Hatchback',
+      category: 'HATCHBACK',
       price: 18000,
       quantity: 5,
     });
+    fetchVehicles.mockResolvedValueOnce(vehicles);
+    fetchVehicles.mockResolvedValueOnce([
+      { id: '3', make: 'Kia', model: 'Soul', category: 'HATCHBACK', price: 18000, quantity: 5 },
+      ...vehicles,
+    ]);
 
     renderAdmin();
     await screen.findByText(/Toyota Camry/);

@@ -113,7 +113,7 @@ describe('auth flows', () => {
 describe('vehicle reads', () => {
   it('normalizes a bare array response from GET /vehicles', async () => {
     global.fetch.mockResolvedValueOnce(
-      jsonResponse([{ id: '1', make: 'Toyota', model: 'Camry', category: 'Sedan', price: '24999', quantity: '3' }])
+      jsonResponse([{ id: '1', make: 'Toyota', model: 'Camry', category: 'SEDAN', price: '24999', quantity: '3' }])
     );
 
     const vehicles = await fetchVehicles();
@@ -156,10 +156,10 @@ describe('vehicle mutations (require auth)', () => {
 
   it('attaches the Authorization header when creating a vehicle', async () => {
     global.fetch.mockResolvedValueOnce(
-      jsonResponse({ id: '10', make: 'Kia', model: 'Soul', category: 'Hatchback', price: 18000, quantity: 5 })
+      jsonResponse({ id: '10', make: 'Kia', model: 'Soul', category: 'HATCHBACK', price: 18000, quantity: 5 })
     );
 
-    await createVehicle({ make: 'Kia', model: 'Soul', category: 'Hatchback', price: 18000, quantity: 5 });
+    await createVehicle({ make: 'Kia', model: 'Soul', category: 'HATCHBACK', price: 18000, quantity: 5 });
 
     const [, options] = global.fetch.mock.calls[1];
     expect(options.headers.Authorization).toBe('Bearer admin-token');
