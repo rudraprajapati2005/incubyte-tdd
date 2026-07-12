@@ -44,7 +44,13 @@ The system allows:
 - **Frontend (Vercel):** https://incubyte-tdd.vercel.app  
 
 ---
+---
+### ⚠️ Note for Reviewers
+To test the Admin functionality (adding/editing/restocking/deleting vehicles), you must log in with the following admin credentials on the frontend or backend:
 
+* **Email:** admin@incubVent.com
+* **Password:** pass123
+---
 ## Test-Driven Development (TDD) 🔄
 This project followed the **Red-Green-Refactor** cycle:
 1. **Red:** Write failing tests first.
